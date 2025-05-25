@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Books</title>
+    <link rel="stylesheet" href="ht.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+     <div class="navigation">
+        <a href="index.html" class="h1">
+            Central Digital Library
+        </a>
+        <div class="nav-bar">
+            
+           <a class="navi" href="index.html"><i class="fa-solid fa-house"></i>             Home</a>
+        <a class="navi" href="book.html">
+<i class="fa-solid fa-book-open"></i>
+              Books</a>
+        <a class="navi"  href="plan.html"> <i class="fa-solid fa-coins"></i> plans</a>
+        <a class="navi" href="about.html"><i class="fa-solid fa-circle-info"></i> About Us</a>
+        <a class="navi" href="contact.html"><i class="fa-solid fa-phone"></i> Contact Us</a>
+        <a class="navi" href="login.html"> <i class="fa-solid fa-user"></i>   Sign In</a>
+
+    
+        </div>
+        
+    </div>
+    <!-- start div -->
+     <section id="books">
+  <h2>Library Book Collection</h2>
+
+  <!-- Search and Filter Controls -->
+  <div class="filters">
+    
+    <div class="search-wrapper">
+  <input type="text" id="searchInput" placeholder="Search books..." onkeyup="filterBooks()">
+  <span class="search-icon">&#128269;</span>
+</div>
+
+    <select id="availabilitySelect" onchange="filterBooks()">
+      <option value="all">All</option>
+      <option value="available">Available</option>
+      <option value="unavailable">Unavailable</option>
+    </select>
+  </div>
+
+  <!-- Book Grid -->
+  <div class="book-grid" id="bookGrid"></div>
+</section>
+
+    <!--  end div-->
+<!-- start js -->
+ <script>
+const books = [
+  { title: "The Great Gatsby", img: "https://covers.openlibrary.org/b/id/7222246-L.jpg", status: "available" },
+  { title: "A Game of Thrones", img: "https://covers.openlibrary.org/b/id/8231852-L.jpg", status: "unavailable" },
+  { title: "1984", img: "https://covers.openlibrary.org/b/id/7222241-L.jpg", status: "available" },
+  { title: "The Hobbit", img: "https://covers.openlibrary.org/b/id/6979861-L.jpg", status: "available" },
+  { title: "Pride and Prejudice", img: "https://covers.openlibrary.org/b/id/8232002-L.jpg", status: "unavailable" },
+  { title: "Fahrenheit 451", img: "https://covers.openlibrary.org/b/id/9251984-L.jpg", status: "available" },
+  { title: "Jane Eyre", img: "https://covers.openlibrary.org/b/id/8088431-L.jpg", status: "unavailable" },
+  { title: "The Catcher in the Rye", img: "https://covers.openlibrary.org/b/id/8231916-L.jpg", status: "available" },
+  { title: "To Kill a Mockingbird", img: "https://covers.openlibrary.org/b/id/8226191-L.jpg", status: "available" },
+  { title: "Brave New World", img: "https://covers.openlibrary.org/b/id/8777474-L.jpg", status: "available" },
+  { title: "The Lord of the Rings", img: "https://covers.openlibrary.org/b/id/8319250-L.jpg", status: "unavailable" },
+  { title: "Wuthering Heights", img: "https://covers.openlibrary.org/b/id/8228691-L.jpg", status: "available" },
+  { title: "The Alchemist", img: "https://covers.openlibrary.org/b/id/8231877-L.jpg", status: "available" },
+  { title: "Moby-Dick", img: "https://covers.openlibrary.org/b/id/7222243-L.jpg", status: "unavailable" },
+  { title: "Crime and Punishment", img: "https://covers.openlibrary.org/b/id/8231920-L.jpg", status: "available" },
+  { title: "The Odyssey", img: "https://covers.openlibrary.org/b/id/8232000-L.jpg", status: "available" },
+  { title: "The Book Thief", img: "https://covers.openlibrary.org/b/id/8155411-L.jpg", status: "unavailable" },
+  { title: "Dracula", img: "https://covers.openlibrary.org/b/id/7222245-L.jpg", status: "available" },
+  { title: "Frankenstein", img: "https://covers.openlibrary.org/b/id/8319251-L.jpg", status: "available" },
+  { title: "Little Women", img: "https://covers.openlibrary.org/b/id/8228711-L.jpg", status: "available" },
+  { title: "Anna Karenina", img: "https://covers.openlibrary.org/b/id/8231853-L.jpg", status: "unavailable" },
+  { title: "The Secret Garden", img: "https://covers.openlibrary.org/b/id/8228712-L.jpg", status: "available" },
+  { title: "Les Misérables", img: "https://covers.openlibrary.org/b/id/8231919-L.jpg", status: "available" },
+  { title: "Great Expectations", img: "https://covers.openlibrary.org/b/id/7222248-L.jpg", status: "unavailable" }
+  
+];
+
+function generateBooks() {
+  const grid = document.getElementById("bookGrid");
+  books.forEach(book => {
+    const wikiUrl = `https://en.wikipedia.org/wiki/${book.title.replace(/ /g, "_")}`;
+    const card = document.createElement("div");
+    card.className = "book-card";
+    card.dataset.title = book.title.toLowerCase();
+    card.dataset.status = book.status;
+
+    card.innerHTML = `
+      <a href="${wikiUrl}" target="_blank">
+        <img src="${book.img}" alt="${book.title}">
+      </a>
+      <h3><a href="${wikiUrl}" target="_blank">${book.title}</a></h3>
+      <button>${book.status === "available" ? "Read" : "Preview"}</button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function filterBooks() {
+  const searchValue = document.getElementById("searchInput").value.toLowerCase();
+  const filterValue = document.getElementById("availabilitySelect").value;
+  const cards = document.querySelectorAll(".book-card");
+
+  cards.forEach(card => {
+    const matchesTitle = card.dataset.title.includes(searchValue);
+    const matchesStatus = (filterValue === "all") || (card.dataset.status === filterValue);
+
+    card.style.display = (matchesTitle && matchesStatus) ? "block" : "none";
+  });
+}
+
+generateBooks();
+</script>
+
+<!--  end js -->
+</body>
+</html>
